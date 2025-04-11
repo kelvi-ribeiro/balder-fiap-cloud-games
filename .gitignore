@@ -1,0 +1,73 @@
+## Build results
+bin/
+obj/
+out/
+
+## User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+## Rider-specific
+.idea/
+
+## Visual Studio Code
+.vscode/
+
+## ASP.NET Logs
+logs/
+*.log
+
+## DotCover
+*.dotCover
+
+## Resharper
+_ReSharper*/
+*.DotSettings.user
+
+## NUnit
+*.VisualState.xml
+TestResult.xml
+TestResults/
+
+## xUnit
+*.trx
+*.coverage
+*.coveragejson
+
+## Azure Pipelines
+.azure-pipelines/
+
+## EF Core
+Migrations/
+
+## Docker
+**/*.pid
+*.db
+docker-compose.override.yml
+
+## Others
+*.DS_Store
+*.env
+.env.*
+secrets.json
+
+## Ignore local config
+appsettings.Development.json
+
+## Ignore compiled DLLs (optional)
+*.dll
+*.exe
+*.pdb
+
+## NuGet Packages
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Global JetBrains
+.idea/
+*.sln.iml
