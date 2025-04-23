@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Balder.FiapCloudGames.Application\Balder.FiapCloudGames.Application.csproj" />
+    <ProjectReference Include="..\Balder.FiapCloudGames.Infrastructure\Balder.FiapCloudGames.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -73,3 +73,5 @@ artifacts/
 *.sln.iml
 /src/Balder.FiapCloudGames.sln
 /src/Balder.FiapCloudGames.sln
+
+.vs/
