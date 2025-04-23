@@ -71,7 +71,5 @@ artifacts/
 ## Global JetBrains
 .idea/
 *.sln.iml
-/src/Balder.FiapCloudGames.sln
-/src/Balder.FiapCloudGames.sln
 
 .vs/
