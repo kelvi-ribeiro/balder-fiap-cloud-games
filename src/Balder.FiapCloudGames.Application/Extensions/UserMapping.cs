@@ -13,7 +13,7 @@ namespace Balder.FiapCloudGames.Application.Extensions
 
         public static User Map(this UserRequest userRequest)
         {
-            return new User(userRequest.Name, userRequest.Email, userRequest.senha);
+            return new User(userRequest.Name, userRequest.Email, userRequest.Senha);
         }
 
     }
