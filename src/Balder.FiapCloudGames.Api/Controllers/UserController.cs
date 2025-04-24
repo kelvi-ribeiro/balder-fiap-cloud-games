@@ -27,7 +27,7 @@ namespace Balder.FiapCloudGames.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users =  await _userService.GetAllUsers();
+            var users = await _userService.GetAllUsers();
             if (users == null || !users.Any())
             {
                 return NotFound();
@@ -37,9 +37,9 @@ namespace Balder.FiapCloudGames.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserRequest user)
         {
-            if (user == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             await _userService.CreateUser(user);
             return Created();
@@ -47,9 +47,9 @@ namespace Balder.FiapCloudGames.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequest user)
         {
-            if (user == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             await _userService.UpdateUser(user);
             return NoContent();
