@@ -16,13 +16,18 @@ namespace Balder.FiapCloudGames.Infrastructure.Context
         }
         public ApplicationDbContext()
         {
-            
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new GameConfiguration());
+        }
+        //TODO: Criar o método OnConfiguring para configurar o banco de dados
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=FiapGames;User Id=sa;Password=Arthur123!;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=true");
         }
     }
 }

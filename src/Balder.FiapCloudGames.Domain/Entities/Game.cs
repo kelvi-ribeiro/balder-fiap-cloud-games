@@ -7,16 +7,10 @@ namespace Balder.FiapCloudGames.Domain.Entities
     {
 
         #region Propriedades
-        [Required(ErrorMessage = "Nome é obrigatório!")]
         public string Name { get; private set; }
-        [Required(ErrorMessage = "Descrição é obrigatória!")]
         public string Description { get; private set; }
-        [Required(ErrorMessage = "Plataforma é obrigatória!")]
         public string Platform { get; private set; }
-        [Required(ErrorMessage = "Nome da empresa é obrigatório!")]
         public string CompanyName { get; private set; }
-        [Required(ErrorMessage = "Preço é obrigatório!")]
-        [Range(0.01, 9999.99, ErrorMessage = "Preço deve ser maior que 0 e menor que 9999,99!")]
         public decimal Price { get; private set; }
 
         #endregion

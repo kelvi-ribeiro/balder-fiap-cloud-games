@@ -5,6 +5,7 @@ using Balder.FiapCloudGames.Domain.Repositories;
 
 namespace Balder.FiapCloudGames.Application.Services
 {
+    //TODO -> FAZER OS TRATAMENTOS E REGRA DE NEGÓCIO
     public class GameService : IGameService
     {
         private readonly IGameRepository _gameRepository;

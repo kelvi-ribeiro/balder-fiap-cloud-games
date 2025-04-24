@@ -1,4 +1,6 @@
-﻿namespace Balder.FiapCloudGames.Domain.Shared.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Balder.FiapCloudGames.Domain.Shared.Entities
 {
     public abstract class Entity : IEquatable<Guid>
     {
