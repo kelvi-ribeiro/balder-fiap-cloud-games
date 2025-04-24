@@ -16,6 +16,10 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+builder.Services.AddTransient<IGameService, GameService>();
+builder.Services.AddTransient<IGameRepository, GameRepository>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     opt=>opt.UseSqlServer(
         "Server=localhost,1433;Database=FiapGames;User Id=sa;Password=Arthur123!;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=true"));
@@ -30,5 +34,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.MapControllers();
 app.Run();

@@ -1,6 +1,5 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Balder.FiapCloudGames.Api.Controllers

@@ -18,6 +18,5 @@ namespace Balder.FiapCloudGames.Domain.Shared.Validations
                 return new ValidationResult("A senha deve conter pelo menos um caractere especial.");
             return ValidationResult.Success!;
         }
-
     }
 }

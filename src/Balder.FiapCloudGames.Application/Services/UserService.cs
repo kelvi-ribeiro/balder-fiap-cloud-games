@@ -25,6 +25,11 @@ namespace Balder.FiapCloudGames.Application.Services
             var user = await _userRepository.GetUserById(id);
             return user.Map();
         }
+        public async Task<UserResponse> GetUserByEmail(string email)
+        {
+            var user = await _userRepository.GetUserByEmail(email);
+            return user.Map();
+        }
         public async Task CreateUser(UserRequest user)
         {
             var userToCreate = user.Map();

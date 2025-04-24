@@ -22,8 +22,11 @@ namespace Balder.FiapCloudGames.Infrastructure.Repositories
 
         public async Task<User?> GetUserById(Guid id)
         {
-
             return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+        }
+        public async Task<User?> GetUserByEmail(string email)
+        {
+            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
         }
         public async Task CreateUser(User user)
         {
