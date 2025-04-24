@@ -117,8 +117,11 @@ Desenvolvido por estudantes da FIAP como parte do desafio Tech Challenge.
 
 
 ## Comando Docker para criar o banco ##
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=FiapGames!" -p 1433:1433 --name sql-server-docker-container -d mcr.microsoft.com/mssql/server:2022-latest 
+~~docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=FiapGames!" -p 1433:1433 --name sql-server-docker-container -d mcr.microsoft.com/mssql/server:2022-latest~~
+
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=FiapGames!" -p 1433:1433 --name sqlFiapGames --hostname sqlFiapGames -d mcr.microsoft.com/mssql/server:2022-latest
+
 
 ## Realizar o migrations ##
-1 -> dotnet ef migrations add (Nome da migração)
-2 -> dotnet ef database update
+1. dotnet ef migrations add InitialCreate
+2. dotnet ef database update
