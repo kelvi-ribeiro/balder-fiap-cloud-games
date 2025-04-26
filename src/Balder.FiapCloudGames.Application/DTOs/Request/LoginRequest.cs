@@ -6,5 +6,6 @@ namespace Balder.FiapCloudGames.Application.DTOs.Request
         [Required(ErrorMessage = "Email obrigatório")]
         [EmailAddress(ErrorMessage = "Email Inválido!")]
         string Email,
-        [Required(ErrorMessage = "Senha Inválida!")] string Password);
+        [Required(ErrorMessage = "Senha Inválida!")]
+        string Password);
 }

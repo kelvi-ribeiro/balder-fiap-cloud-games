@@ -40,7 +40,7 @@ TestResults/
 .azure-pipelines/
 
 ## EF Core
-Migrations/
+#Migrations/
 
 ## Docker
 **/*.pid

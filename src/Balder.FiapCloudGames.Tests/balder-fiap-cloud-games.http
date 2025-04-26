@@ -1,0 +1,38 @@
+### HTTPS
+### Login como user e lista todos os usuarios cadastrados na base de dados
+
+# @name login
+POST https://localhost:7174/api/v1/Authentication/login
+Content-Type: application/json
+
+{
+  "email": "user@fiapgames.com",
+  "password": "userFG123!"
+}
+
+###
+
+GET https://localhost:7174/api/v1/User/get-all
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
+
+
+### HTTP
+### Login como user e lista todos os usuarios cadastrados na base de dados
+
+# @name login
+POST http://localhost:5135/api/v1/Authentication/login
+Content-Type: application/json
+
+{
+  "email": "user@fiapgames.com",
+  "password": "userFG123!"
+}
+
+###
+
+GET http://localhost:5135/api/v1/User/get-all
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
