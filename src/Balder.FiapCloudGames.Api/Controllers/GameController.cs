@@ -1,5 +1,6 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Balder.FiapCloudGames.Api.Controllers
@@ -13,13 +14,15 @@ namespace Balder.FiapCloudGames.Api.Controllers
         {
             _gameService = gameService;
         }
-        [HttpGet]
+        [HttpGet("get-all")]
+        [Authorize]
         public async Task<IActionResult> GetAllGames()
         {
             var games = await _gameService.GetAllGames();
             return Ok(games);
         }
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetGameById(Guid id)
         {
             var game = await _gameService.GetGameById(id);
@@ -28,6 +31,7 @@ namespace Balder.FiapCloudGames.Api.Controllers
             return Ok(game);
         }
         [HttpGet("name/{name}")]
+        [Authorize]
         public async Task<IActionResult> GetGameByName(string name)
         {
             var game = await _gameService.GetGameByName(name);
@@ -35,7 +39,8 @@ namespace Balder.FiapCloudGames.Api.Controllers
                 return NotFound($"Jogo não encontrado!");
             return Ok(game);
         }
-        [HttpPost]
+        [HttpPost("create")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateGame([FromBody] GameRequest game)
         {
             if (game == null)
@@ -43,7 +48,8 @@ namespace Balder.FiapCloudGames.Api.Controllers
             await _gameService.CreateGame(game);
             return Created();
         }
-        [HttpPut]
+        [HttpPut("update")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateGame([FromBody] GameRequest game)
         {
             if (game == null)
@@ -52,6 +58,7 @@ namespace Balder.FiapCloudGames.Api.Controllers
             return NoContent();
         }
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteGame(Guid id)
         {
             var game = await _gameService.GetGameById(id);

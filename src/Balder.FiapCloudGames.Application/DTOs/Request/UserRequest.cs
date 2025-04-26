@@ -11,5 +11,5 @@ public sealed record UserRequest(
     string Email,
     [Required(ErrorMessage = "Senha é obrigatória!")]
     [CustomValidation(typeof(CustomValidation), nameof(CustomValidation.PasswordValidate))]
-    string Senha
+    string Password
 );

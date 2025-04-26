@@ -20,7 +20,9 @@ namespace Balder.FiapCloudGames.Infrastructure.Configurations
 
             builder.Property(u => u.Password)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
+            builder.Property(u => u.Role)
+                .HasMaxLength(15);
         }
     }
 }

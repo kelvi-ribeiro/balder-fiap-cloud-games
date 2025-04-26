@@ -1,5 +1,6 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Balder.FiapCloudGames.Api.Controllers
@@ -15,6 +16,7 @@ namespace Balder.FiapCloudGames.Api.Controllers
             _userService = userService;
         }
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userService.GetUserById(id);
@@ -24,7 +26,8 @@ namespace Balder.FiapCloudGames.Api.Controllers
             }
             return Ok(user);
         }
-        [HttpGet]
+        [HttpGet("get-all")]
+        [Authorize]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
@@ -34,17 +37,8 @@ namespace Balder.FiapCloudGames.Api.Controllers
             }
             return Ok(users);
         }
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserRequest user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            await _userService.CreateUser(user);
-            return Created();
-        }
-        [HttpPut]
+        [HttpPut("update")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser([FromBody] UserRequest user)
         {
             if (!ModelState.IsValid)
@@ -55,6 +49,7 @@ namespace Balder.FiapCloudGames.Api.Controllers
             return NoContent();
         }
         [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var user = await _userService.GetUserById(id);

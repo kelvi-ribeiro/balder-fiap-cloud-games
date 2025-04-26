@@ -17,73 +17,120 @@ namespace Balder.FiapCloudGames.Application.Services
 
         public async Task<ICollection<GameResponse>> GetAllGames()
         {
-            var games = await _gameRepository.GetAllGames();
-            return games.Select(g => new GameResponse(
-                g.Id,
-                g.Name,
-                g.Description,
-                g.Platform,
-                g.CompanyName,
-                g.Price)).ToList();
+            try
+            {
+                var games = await _gameRepository.GetAllGames();
+                return games.Select(g => new GameResponse(
+                    g.Id,
+                    g.Name,
+                    g.Description,
+                    g.Platform,
+                    g.CompanyName,
+                    g.Price)).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<GameResponse> GetGameById(Guid id)
         {
-            var game = await _gameRepository.GetGameById(id);
-            if (game == null)
-                throw new Exception($"Jogo não encontrado!");
-            return new GameResponse(
-                game.Id,
-                game.Name,
-                game.Description,
-                game.Platform,
-                game.CompanyName,
-                game.Price);
+            try
+            {
+                var game = await _gameRepository.GetGameById(id);
+                if (game == null)
+                    throw new Exception($"Jogo não encontrado!");
+                return new GameResponse(
+                    game.Id,
+                    game.Name,
+                    game.Description,
+                    game.Platform,
+                    game.CompanyName,
+                    game.Price);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
         public async Task<GameResponse> GetGameByName(string name)
         {
-            var game = await _gameRepository.GetGameByName(name);
-            if (game == null)
-                throw new Exception($"Jogo não encontrado!");
-            return new GameResponse(
-                game.Id,
-                game.Name,
-                game.Description,
-                game.Platform,
-                game.CompanyName,
-                game.Price);
+            try
+            {
+                var game = await _gameRepository.GetGameByName(name);
+                if (game == null)
+                    throw new Exception($"Jogo não encontrado!");
+                return new GameResponse(
+                    game.Id,
+                    game.Name,
+                    game.Description,
+                    game.Platform,
+                    game.CompanyName,
+                    game.Price);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
         public async Task CreateGame(GameRequest game)
         {
-            var newGame = new Domain.Entities.Game(
-                game.Name,
-                game.Description,
-                game.Platform,
-                game.CompanyName,
-                game.Price);
-            await _gameRepository.CreateGame(newGame);
+            try
+            {
+                var newGame = new Domain.Entities.Game(
+                    game.Name,
+                    game.Description,
+                    game.Platform,
+                    game.CompanyName,
+                    game.Price);
+                await _gameRepository.CreateGame(newGame);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
         public async Task UpdateGame(GameRequest game)
         {
-            var existingGame = await _gameRepository.GetGameByName(game.Name);
-            if (existingGame == null)
-                throw new KeyNotFoundException($"Jogo ja cadastrado");
-            existingGame.UpdateGame(new Domain.Entities.Game(
-                game.Name,
-                game.Description,
-                game.Platform,
-                game.CompanyName,
-                game.Price));
-            await _gameRepository.UpdateGame(existingGame);
+            try
+            {
+                var existingGame = await _gameRepository.GetGameByName(game.Name);
+                if (existingGame == null)
+                    throw new KeyNotFoundException($"Jogo não encontrado");
+                existingGame.UpdateGame(new Domain.Entities.Game(
+                    game.Name,
+                    game.Description,
+                    game.Platform,
+                    game.CompanyName,
+                    game.Price));
+                await _gameRepository.UpdateGame(existingGame);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task DeleteGame(Guid id)
         {
-            var game = await _gameRepository.GetGameById(id);
-            if (game == null)
-                throw new KeyNotFoundException($"Game with id {id} not found.");
-            await _gameRepository.DeleteGame(game.Id);
-        }
+            try
+            {
+                var game = await _gameRepository.GetGameById(id);
+                if (game == null)
+                    throw new KeyNotFoundException($"Jogo não encontrado.");
+                await _gameRepository.DeleteGame(game.Id);
+            }
+            catch (Exception ex)
+            {
 
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
