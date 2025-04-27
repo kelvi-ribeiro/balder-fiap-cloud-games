@@ -116,12 +116,23 @@ Desenvolvido por estudantes da FIAP como parte do desafio Tech Challenge.
 - Arthur Zimmermann de Oliveira
 
 
-## Comando Docker para criar o banco ##
-~~docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=FiapGames!" -p 1433:1433 --name sql-server-docker-container -d mcr.microsoft.com/mssql/server:2022-latest~~
+## Comando Docker para criar o banco 
 
+```bash
 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=FiapGames!" -p 1433:1433 --name sqlFiapGames --hostname sqlFiapGames -d mcr.microsoft.com/mssql/server:2022-latest
+```
 
+---
 
-## Realizar o migrations ##
-1. dotnet ef migrations add InitialCreate
-2. dotnet ef database update
+## Realizar o migrations 
+
+```bash
+# 1. Entre na pasta de infraestrutura
+cd src/Balder.FiapCloudGames.Infrastructure
+
+# 2. Inicie a migração
+dotnet ef migrations add InitialCreate
+
+# 3. Aplique a migração
+dotnet ef database update
+```
