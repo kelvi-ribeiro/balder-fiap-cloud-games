@@ -1,14 +1,13 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.DTOs.Response;
+using Balder.FiapCloudGames.Application.DTOs.Response.User;
 
-namespace Balder.FiapCloudGames.Application.Interfaces
+namespace Balder.FiapCloudGames.Application.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<UserResponse> GetUserById(Guid id);
-        Task<UserResponse> GetUserByEmail(string email);
-        Task<ICollection<UserResponse>> GetAllUsers();
-        Task UpdateUser(UserRequest user);
-        Task DeleteUser(Guid id);
-    }
+    Task<GetUserDetailResponse> GetUserById(Guid id);
+    Task<GetAllUsersResponse> GetAllUsers();
+    Task<BaseResponse> UpdateUser(UserRequest user, Guid id);
+    Task<BaseResponse> DeleteUser(Guid id);
 }

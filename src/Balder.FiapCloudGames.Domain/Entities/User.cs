@@ -9,7 +9,6 @@ namespace Balder.FiapCloudGames.Domain.Entities
         public string Password { get; private set; }
         public string Role { get; private set; }
 
-        #region Construtor
         public User(string name, string email, string password, string role) : base(Guid.NewGuid())
         {
             Name = name;
@@ -17,14 +16,5 @@ namespace Balder.FiapCloudGames.Domain.Entities
             Password = password;
             Role = role;
         }
-        #endregion
-        #region Métodos
-        public void UpdateUser(User user)
-        {
-            Name = user.Name;
-            Email = user.Email;
-            Password = user.Password;
-        }
-        #endregion
     }
 }

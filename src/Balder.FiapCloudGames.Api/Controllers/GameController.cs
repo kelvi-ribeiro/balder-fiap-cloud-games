@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Balder.FiapCloudGames.Api.Controllers;
 
 [ApiController]
-[Route("api/v1/game")]
+[Route("api/v1/games")]
 public class GameController(IGameService gameService) : BaseController
 {
     [HttpGet]
@@ -16,7 +16,7 @@ public class GameController(IGameService gameService) : BaseController
         return await this.MakeSafeCallAsync(gameService.GetAllGames);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> GetGameById(Guid id)
     {

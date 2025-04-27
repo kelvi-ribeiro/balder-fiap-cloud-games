@@ -1,95 +1,65 @@
-﻿using Balder.FiapCloudGames.Application.DTOs.Request;
+﻿using System.Net;
+using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.DTOs.Response;
+using Balder.FiapCloudGames.Application.DTOs.Response.User;
 using Balder.FiapCloudGames.Application.Extensions;
 using Balder.FiapCloudGames.Application.Interfaces;
 using Balder.FiapCloudGames.Domain.Repositories;
 
-namespace Balder.FiapCloudGames.Application.Services
+namespace Balder.FiapCloudGames.Application.Services;
+
+public class UserService(IUserRepository userRepository) : IUserService
 {
-    //TODO -> FAZER OS TRATAMENTOS E REGRA DE NEGÓCIO
-    public class UserService : IUserService
+    public async Task<GetAllUsersResponse> GetAllUsers()
     {
-        private readonly IUserRepository _userRepository;
+        var response = new GetAllUsersResponse();
+        var users = await userRepository.GetAllUsers();
+        response.Users = users.Select(u => u.Map()).ToList();
+        return response;
+    }
 
-        public UserService(IUserRepository userRepository)
+    public async Task<GetUserDetailResponse> GetUserById(Guid id)
+    {
+        var response = new GetUserDetailResponse();
+        var user = await userRepository.GetUserById(id);
+        if (user == null)
         {
-            _userRepository = userRepository;
+            response.AddError("USER_NOT_FOUND", $"Game with id {id} not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
-        public async Task<ICollection<UserResponse>> GetAllUsers()
+        response.User = user.Map();
+        return response;
+
+    }
+
+    public async Task<BaseResponse> UpdateUser(UserRequest userRequest, Guid id)
+    {
+        var response = new GetUserDetailResponse();
+        var existentUser = await userRepository.GetUserById(id);
+        if (existentUser == null)
         {
-            try
-            {
-                var users = await _userRepository.GetAllUsers();
-                return users.Select(u => u.Map()).ToList();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
+            response.AddError("USER_NOT_FOUND", $"Game with id '{id}' not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
+        var updatedUser = userRequest.Map();
+        updatedUser.Id = id;    
+        await userRepository.UpdateUser(updatedUser);
+        return response;
+    }
 
-        public async Task<UserResponse> GetUserById(Guid id)
+    public async Task<BaseResponse> DeleteUser(Guid id)
+    {
+       var response = new BaseResponse();
+        var existentUser = await userRepository.GetUserById(id);
+        if (existentUser == null)
         {
-            try
-            {
-                var user = await _userRepository.GetUserById(id);
-                return user.Map();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
+            response.AddError("USER_NOT_FOUND", $"Game with id '{id}' not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
-        public async Task<UserResponse> GetUserByEmail(string email)
-        {
-            try
-            {
-                var user = await _userRepository.GetUserByEmail(email);
-                return user.Map();
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task UpdateUser(UserRequest user)
-        {
-            try
-            {
-                var userToUpdate = user.Map("");
-                var userFromDb = await _userRepository.GetUserById(userToUpdate.Id);
-                if (userFromDb == null)
-                {
-                    throw new Exception("Usuário não encontrado!");
-                }
-                userFromDb.UpdateUser(userToUpdate);
-                await _userRepository.UpdateUser(userFromDb);
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }     
-        }
-
-        public async Task DeleteUser(Guid id)
-        {
-            try
-            {
-                var userToDelete = await _userRepository.GetUserById(id);
-                if (userToDelete == null)
-                {
-                    throw new Exception("Usuário não encontrado!");
-                }
-                await _userRepository.DeleteUser(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        await userRepository.DeleteUser(id);
+        return response;
     }
 }

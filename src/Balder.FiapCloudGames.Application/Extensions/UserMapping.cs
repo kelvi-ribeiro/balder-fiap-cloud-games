@@ -7,19 +7,14 @@ namespace Balder.FiapCloudGames.Application.Extensions
 {
     public static class UserMapping
     {
-        public static UserResponse Map(this User user)
+        public static UserDto Map(this User user)
         {
-            return new UserResponse(user.Id, user.Name, user.Email,string.Empty);
+            return new UserDto(user.Id, user.Name, user.Email);
         }
 
-        public static User Map(this UserRequest registerRequest, string role)
+        public static User Map(this UserRequest registerRequest, string role = "user")
         {
-            if (string.IsNullOrEmpty(role))
-            {
-                role = "user";
-            }
             return new User(registerRequest.Name, registerRequest.Email, HashingService.HashPassword(registerRequest.Password), role);
         }
-
     }
 }

@@ -1,13 +1,13 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.DTOs.Response;
+using Balder.FiapCloudGames.Application.DTOs.Response.Authentication;
 using Balder.FiapCloudGames.Domain.Entities;
 
-namespace Balder.FiapCloudGames.Application.Interfaces
+namespace Balder.FiapCloudGames.Application.Interfaces;
+
+public interface IAuthenticationService
 {
-    public interface IAuthenticationService
-    {
-        Task<UserResponse> Login(LoginRequest login);
-        Task<UserResponse> Register(UserRequest register);
-        string GenerateToken(User login);
-    }
+    Task<LoginResponse> Login(LoginRequest login);
+    Task<BaseResponse> Register(UserRequest register);
+    string GenerateToken(User login);
 }

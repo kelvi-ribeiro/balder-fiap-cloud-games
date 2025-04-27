@@ -2,5 +2,5 @@
 
 public class GetAllGamesResponse : BaseResponse
 {
-    public IEnumerable<GameDto> Games { get; set; } = [];
+    public IEnumerable<GameDto>? Games { get; set; }
 }

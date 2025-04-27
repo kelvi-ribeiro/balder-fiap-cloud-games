@@ -35,13 +35,7 @@ namespace Balder.FiapCloudGames.Infrastructure.Repositories
         }
         public async Task UpdateUser(User user)
         {
-            var userToUpdate = await _context.Users.FindAsync(user.Id);
-            if (userToUpdate == null)
-            {
-                throw new Exception("Usuário não encontrado!");
-            }
-            userToUpdate!.UpdateUser(user);
-            _context.Users.Update(userToUpdate);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
