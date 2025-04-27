@@ -1,22 +1,22 @@
-﻿namespace Balder.FiapCloudGames.Api.Configurations
+﻿using Balder.FiapCloudGames.Infrastructure.Extensions;
+
+namespace Balder.FiapCloudGames.Api.Configurations;
+public static class AppConfiguration
 {
-    public static class AppConfiguration
+    public static WebApplication AddAppConfiguration(this WebApplication app)
     {
-        public static WebApplication AddAppConfiguration(this WebApplication app)
+        if (app.Environment.IsDevelopment())
         {
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapControllers();
-
-            return app;
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
-    }
 
+        app.UseHttpsRedirection();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.MapControllers();
+        app.UseLoggingMiddleware();
+        app.UseCorrelationMiddleware();
+        return app;
+    }
 }

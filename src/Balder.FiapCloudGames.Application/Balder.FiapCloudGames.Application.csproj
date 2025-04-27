@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Balder.FiapCloudGames.Domain\Balder.FiapCloudGames.Domain.csproj" />
+    <ProjectReference Include="..\Balder.FiapCloudGames.Infrastructure\Balder.FiapCloudGames.Infrastructure.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
