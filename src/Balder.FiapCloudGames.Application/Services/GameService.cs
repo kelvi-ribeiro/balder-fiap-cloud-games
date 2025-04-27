@@ -1,136 +1,116 @@
-﻿using Balder.FiapCloudGames.Application.DTOs.Request;
+﻿using System.Net;
+using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.DTOs.Response;
+using Balder.FiapCloudGames.Application.DTOs.Response.Game;
+using Balder.FiapCloudGames.Application.Extensions;
 using Balder.FiapCloudGames.Application.Interfaces;
 using Balder.FiapCloudGames.Domain.Repositories;
 
-namespace Balder.FiapCloudGames.Application.Services
+namespace Balder.FiapCloudGames.Application.Services;
+
+public class GameService : IGameService
 {
-    //TODO -> FAZER OS TRATAMENTOS E REGRA DE NEGÓCIO
-    public class GameService : IGameService
+    private readonly IGameRepository _gameRepository;
+
+    public GameService(IGameRepository gameRepository)
     {
-        private readonly IGameRepository _gameRepository;
+        _gameRepository = gameRepository;
+    }
 
-        public GameService(IGameRepository gameRepository)
+    public async Task<GetAllGamesResponse> GetAllGames()
+    {
+
+        var games = await _gameRepository.GetAllGames();
+        return new GetAllGamesResponse
         {
-            _gameRepository = gameRepository;
+            Games = games.Select(g => new GameDto(
+                g.Id,
+                g.Name,
+                g.Description,
+                g.Platform,
+                g.CompanyName,
+                g.Price))
+        };
+    }
+
+    public async Task<GetGameDetailResponse> GetGameById(Guid id)
+    {
+        var response = new GetGameDetailResponse();
+        var game = await _gameRepository.GetGameById(id);
+        if (game == null)
+        {
+            response.AddError("GAME_NOT_FOUND", $"Game with id {id} not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
 
-        public async Task<ICollection<GameResponse>> GetAllGames()
-        {
-            try
-            {
-                var games = await _gameRepository.GetAllGames();
-                return games.Select(g => new GameResponse(
-                    g.Id,
-                    g.Name,
-                    g.Description,
-                    g.Platform,
-                    g.CompanyName,
-                    g.Price)).ToList();
-            }
-            catch (Exception ex)
-            {
+        response.Game = game.Map();
+        return response;
+    }
 
-                throw new Exception(ex.Message);
-            }
+    public async Task<GetGameDetailResponse> GetGameByName(string name)
+    {
+
+        var response = new GetGameDetailResponse();
+        var game = await _gameRepository.GetGameByName(name);
+        if (game == null)
+        {
+            response.AddError("GAME_NOT_FOUND", $"Game with name '{name}' not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
 
-        public async Task<GameResponse> GetGameById(Guid id)
-        {
-            try
-            {
-                var game = await _gameRepository.GetGameById(id);
-                if (game == null)
-                    throw new Exception($"Jogo não encontrado!");
-                return new GameResponse(
-                    game.Id,
-                    game.Name,
-                    game.Description,
-                    game.Platform,
-                    game.CompanyName,
-                    game.Price);
-            }
-            catch (Exception ex)
-            {
+        response.Game = game.Map();
+        return response;
+    }
 
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task<GameResponse> GetGameByName(string name)
-        {
-            try
-            {
-                var game = await _gameRepository.GetGameByName(name);
-                if (game == null)
-                    throw new Exception($"Jogo não encontrado!");
-                return new GameResponse(
-                    game.Id,
-                    game.Name,
-                    game.Description,
-                    game.Platform,
-                    game.CompanyName,
-                    game.Price);
-            }
-            catch (Exception ex)
-            {
+    public async Task<BaseResponse> CreateGame(GameRequest game)
+    {
+        var newGame = new Domain.Entities.Game(
+            game.Name,
+            game.Description,
+            game.Platform,
+            game.CompanyName,
+            game.Price);
+        await _gameRepository.CreateGame(newGame);
+        return new BaseResponse();
+    }
 
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task CreateGame(GameRequest game)
-        {
-            try
-            {
-                var newGame = new Domain.Entities.Game(
-                    game.Name,
-                    game.Description,
-                    game.Platform,
-                    game.CompanyName,
-                    game.Price);
-                await _gameRepository.CreateGame(newGame);
-            }
-            catch (Exception ex)
-            {
+    public async Task<BaseResponse> UpdateGame(GameRequest game, Guid id)
+    {
+        var response = new BaseResponse();
 
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task UpdateGame(GameRequest game)
+        var existingGame = await _gameRepository.GetGameById(id);
+        if (existingGame == null)
         {
-            try
-            {
-                var existingGame = await _gameRepository.GetGameByName(game.Name);
-                if (existingGame == null)
-                    throw new KeyNotFoundException($"Jogo não encontrado");
-                existingGame.UpdateGame(new Domain.Entities.Game(
-                    game.Name,
-                    game.Description,
-                    game.Platform,
-                    game.CompanyName,
-                    game.Price));
-                await _gameRepository.UpdateGame(existingGame);
-            }
-            catch (Exception ex)
-            {
-
-                throw new Exception(ex.Message);
-            }
+            response.AddError("GAME_NOT_FOUND", $"Game with id '{id}' not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
 
-        public async Task DeleteGame(Guid id)
-        {
-            try
-            {
-                var game = await _gameRepository.GetGameById(id);
-                if (game == null)
-                    throw new KeyNotFoundException($"Jogo não encontrado.");
-                await _gameRepository.DeleteGame(game.Id);
-            }
-            catch (Exception ex)
-            {
+        existingGame.UpdateGame(new Domain.Entities.Game(
+            game.Name,
+            game.Description,
+            game.Platform,
+            game.CompanyName,
+            game.Price));
+        await _gameRepository.UpdateGame(existingGame);
+        return response;
+    }
 
-                throw new Exception(ex.Message);
-            }
+    public async Task<BaseResponse> DeleteGame(Guid id)
+    {
+        var response = new BaseResponse();
+
+        var existingGame = await _gameRepository.GetGameById(id);
+        if (existingGame == null)
+        {
+            response.AddError("GAME_NOT_FOUND", $"Game with id '{id}' not found.");
+            response.StatusCode = HttpStatusCode.NotFound;
+            return response;
         }
+
+        await _gameRepository.DeleteGame(existingGame.Id);
+        return response;
     }
 }

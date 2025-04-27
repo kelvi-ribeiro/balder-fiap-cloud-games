@@ -1,15 +1,15 @@
 ﻿using Balder.FiapCloudGames.Application.DTOs.Request;
 using Balder.FiapCloudGames.Application.DTOs.Response;
+using Balder.FiapCloudGames.Application.DTOs.Response.Game;
 
-namespace Balder.FiapCloudGames.Application.Interfaces
+namespace Balder.FiapCloudGames.Application.Interfaces;
+
+public interface IGameService
 {
-    public interface IGameService
-    {
-        Task<GameResponse> GetGameById(Guid id);
-        Task<GameResponse> GetGameByName(string name);
-        Task<ICollection<GameResponse>> GetAllGames();
-        Task CreateGame(GameRequest game);
-        Task UpdateGame(GameRequest game);
-        Task DeleteGame(Guid id);
-    }
+    Task<GetGameDetailResponse> GetGameById(Guid id);
+    Task<GetGameDetailResponse> GetGameByName(string name);
+    Task<GetAllGamesResponse> GetAllGames();
+    Task<BaseResponse> CreateGame(GameRequest game);
+    Task<BaseResponse> UpdateGame(GameRequest game, Guid id);
+    Task<BaseResponse> DeleteGame(Guid id);
 }
