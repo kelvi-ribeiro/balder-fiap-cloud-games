@@ -2,7 +2,7 @@
 ### Login como user e lista todos os usuarios cadastrados na base de dados
 
 # @name login
-POST https://localhost:7174/api/v1/Authentication/login
+POST http://localhost:5135/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -12,8 +12,8 @@ Content-Type: application/json
 
 ###
 
-GET https://localhost:7174/api/v1/User/get-all
-Authorization: Bearer {{login.response.body.$.token}}
+GET https://localhost:7174/api/v1/users
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
 
@@ -22,7 +22,7 @@ Authorization: Bearer {{login.response.body.$.token}}
 ### Login como user e lista todos os usuarios cadastrados na base de dados
 
 # @name login
-POST http://localhost:5135/api/v1/Authentication/login
+POST http://localhost:5135/api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:5135/api/v1/User/get-all
-Authorization: Bearer {{login.response.body.$.token}}
+GET http://localhost:5135/api/v1/users
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###

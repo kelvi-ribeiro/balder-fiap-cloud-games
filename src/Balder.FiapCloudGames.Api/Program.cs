@@ -13,7 +13,7 @@ builder.Services.AddServicesConfiguration();
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     opt=>opt.UseSqlServer(
-        "Server=localhost,1433;Database=FiapGames;User Id=sa;Password=Arthur123!;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=true"));
+        "Server=127.0.0.1,1433;Database=FiapGames;User Id=sa;Password=FiapGames!;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=true"));
 
 var app = builder.Build();
 app.AddAppConfiguration();
