@@ -42,16 +42,16 @@ namespace Balder.FiapCloudGames.Infrastructure.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
-            #region CustomInsert
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Name", "Email", "Password", "Role" },
-                values: new object[,]
-                {
-                    { Guid.NewGuid(), "Admin", "admin@admin.com", "$2a$11$qMAkSQCPQ/AgL3JqFv/aI.TNxO2FRFs8rWjzx1c2Zm6PWwupVrHXi", "admin" }, //Password - adminFG123!
-                    { Guid.NewGuid(), "User", "user@fiapgames.com", "$2a$11$dACyarlQmDHImkKicCYvtem86VRXQfv9SgI7XMH/Ol.P0ducjIeB2", "user" }  //Password - userFG123!
-                });
-            #endregion
+            //#region CustomInsert
+            //migrationBuilder.InsertData(
+            //    table: "Users",
+            //    columns: new[] { "Id", "Name", "Email", "Password", "Role" },
+            //    values: new object[,]
+            //    {
+            //        { Guid.NewGuid(), "Admin", "admin@admin.com", "$2a$11$qMAkSQCPQ/AgL3JqFv/aI.TNxO2FRFs8rWjzx1c2Zm6PWwupVrHXi", "admin" }, //Password - adminFG123!
+            //        { Guid.NewGuid(), "User", "user@fiapgames.com", "$2a$11$dACyarlQmDHImkKicCYvtem86VRXQfv9SgI7XMH/Ol.P0ducjIeB2", "user" }  //Password - userFG123!
+            //    });
+            //#endregion
         }
 
         /// <inheritdoc />

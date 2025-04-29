@@ -12,7 +12,6 @@ namespace Balder.FiapCloudGames.Domain.Entities
         public string Platform { get; private set; }
         public string CompanyName { get; private set; }
         public decimal Price { get; private set; }
-
         #endregion
         #region Construtor
         public Game(string name, string description, string platform, string companyName, decimal price) : base(Guid.NewGuid())
