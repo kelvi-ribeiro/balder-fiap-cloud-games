@@ -28,13 +28,5 @@ namespace Balder.FiapCloudGames.Infrastructure.Context
                 new User("a7155384-ed2e-47a8-b603-60a5aa9ba424", "User", "user@fiapgames.com", "$2a$11$dACyarlQmDHImkKicCYvtem86VRXQfv9SgI7XMH/Ol.P0ducjIeB2", "user" )  //Password - userFG123!
             );
         }
-        //TODO: Criar o método OnConfiguring para configurar o banco de dados
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=127.0.0.1,1433;Database=FiapGames;User Id=sa;Password=FiapGames!;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=true");
-            }
-        }
     }
 }
