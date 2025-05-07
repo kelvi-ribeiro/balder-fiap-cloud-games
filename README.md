@@ -130,9 +130,9 @@ docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=FiapGames!" -p 1433:1433 --n
 # 1. Entre na pasta de infraestrutura
 cd src/Balder.FiapCloudGames.Infrastructure
 
-# 2. Inicie a migração
-dotnet ef migrations add InitialCreate
+# 2. Excluir banco, caso ja exista
+dotnet ef database drop
 
-# 3. Aplique a migração
+# 3. Aplicar a migração
 dotnet ef database update
 ```
