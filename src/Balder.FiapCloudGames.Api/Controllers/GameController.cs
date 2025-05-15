@@ -2,6 +2,7 @@
 using Balder.FiapCloudGames.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Balder.FiapCloudGames.Api.Controllers;
 
@@ -10,6 +11,9 @@ namespace Balder.FiapCloudGames.Api.Controllers;
 public class GameController(IGameService gameService) : BaseController
 {
     [HttpGet]
+    [SwaggerOperation(Summary = "Visualizar todos Games", Description = "Endpoint para visualizar todos os Games já cadastrados")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
     public async Task<IActionResult> GetAllGames()
     {
@@ -17,6 +21,10 @@ public class GameController(IGameService gameService) : BaseController
     }
 
     [HttpGet("{id:guid}")]
+    [SwaggerOperation(Summary = "Visualizar games", Description = "Endpoint para buscar o game baseado no ID pré-definido")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
     public async Task<IActionResult> GetGameById(Guid id)
     {
@@ -24,6 +32,10 @@ public class GameController(IGameService gameService) : BaseController
     }
 
     [HttpGet("name/{name}")]
+    [SwaggerOperation(Summary = "Visualizar games por nome", Description = "Endpoint para buscar o game baseado no Nome do Game")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
     public async Task<IActionResult> GetGameByName(string name)
     {
@@ -31,6 +43,11 @@ public class GameController(IGameService gameService) : BaseController
     }
 
     [HttpPost]
+    [SwaggerOperation(Summary = "Criar novo game", Description = "Endpoint para criar um novo game")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> CreateGame([FromBody] GameRequest game)
     {
@@ -38,6 +55,12 @@ public class GameController(IGameService gameService) : BaseController
     }
 
     [HttpPut("{id:guid}")]
+    [SwaggerOperation(Summary = "Atualizar game", Description = "Endpoint para atualizar um game por ID")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> UpdateGame([FromBody] GameRequest game, [FromRoute] Guid id)
     {
@@ -45,6 +68,11 @@ public class GameController(IGameService gameService) : BaseController
     }
 
     [HttpDelete("{id:guid}")]
+    [SwaggerOperation(Summary = "Deletar game", Description = "Endpoint para deletar game por ID pré-definido")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteGame(Guid id)
     {
