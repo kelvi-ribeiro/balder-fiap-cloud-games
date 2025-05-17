@@ -3,56 +3,58 @@ using Balder.FiapCloudGames.Domain.Repositories;
 using Balder.FiapCloudGames.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Balder.FiapCloudGames.Infrastructure.Repositories
+namespace Balder.FiapCloudGames.Infrastructure.Repositories;
+
+public class GameRepository(ApplicationDbContext context) : IGameRepository
 {
-    public class GameRepository : IGameRepository
+    public async Task<ICollection<Game>> GetAllGames()
     {
-        private readonly ApplicationDbContext _context;
+        return await context.Games.AsNoTracking().ToListAsync();
+    }
 
-        public GameRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public async Task<Game?> GetGameById(Guid id)
+    {
+        return await context
+            .Games
+            .Include(g => g.GameUsers)
+            .ThenInclude(gu => gu.User)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(g => g.Id == id);
+    }
+    public async Task<Game?> GetGameByName(string name)
+    {
+        return await context
+            .Games
+            .Include(g => g.GameUsers)
+            .ThenInclude(gu => gu.User)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(g => g.Name == name);
+    }
 
-        public async Task<ICollection<Game>> GetAllGames()
+    public async Task CreateGame(Game game)
+    {
+        await context.Games.AddAsync(game);
+        await context.SaveChangesAsync();
+    }
+    public async Task UpdateGame(Game game)
+    {
+        var gameToUpdate = await context.Games.FindAsync(game.Id);
+        if (gameToUpdate == null)
         {
-            return await _context.Games.AsNoTracking().ToListAsync();
+            throw new Exception("Jogo não encontrado!");
         }
-
-        public async Task<Game?> GetGameById(Guid id)
+        gameToUpdate!.UpdateGame(game);
+        context.Games.Update(gameToUpdate);
+        await context.SaveChangesAsync();
+    }
+    public async Task DeleteGame(Guid id)
+    {
+        var gameToDelete = await context.Games.FindAsync(id);
+        if (gameToDelete == null)
         {
-            return await _context.Games.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
+            throw new Exception("Jogo não encontrado!");
         }
-        public async Task<Game?> GetGameByName(string name)
-        {
-            return await _context.Games.AsNoTracking().FirstOrDefaultAsync(g => g.Name == name);
-        }
-
-        public async Task CreateGame(Game game)
-        {
-            await _context.Games.AddAsync(game);
-            await _context.SaveChangesAsync();
-        }
-        public async Task UpdateGame(Game game)
-        {
-            var gameToUpdate = await _context.Games.FindAsync(game.Id);
-            if (gameToUpdate == null)
-            {
-                throw new Exception("Jogo não encontrado!");
-            }
-            gameToUpdate!.UpdateGame(game);
-            _context.Games.Update(gameToUpdate);
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteGame(Guid id)
-        {
-            var gameToDelete = await _context.Games.FindAsync(id);
-            if (gameToDelete == null)
-            {
-                throw new Exception("Jogo não encontrado!");
-            }
-            _context.Games.Remove(gameToDelete);
-            await _context.SaveChangesAsync();
-        }
+        context.Games.Remove(gameToDelete);
+        await context.SaveChangesAsync();
     }
 }

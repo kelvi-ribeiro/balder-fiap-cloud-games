@@ -11,11 +11,12 @@ namespace Balder.FiapCloudGames.Tests.Services;
 public class UserServiceTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IGameRepository> _gameRepositoryMock = new();
     private readonly IUserService _userService;
 
     public UserServiceTests()
     {
-        _userService = new UserService(_userRepositoryMock.Object);
+        _userService = new UserService(_userRepositoryMock.Object, _gameRepositoryMock.Object);
     }
 
     [Fact]
@@ -138,5 +139,91 @@ public class UserServiceTests
         Assert.NotNull(response);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Contains(response.Errors!, e => e.Code == "USER_NOT_FOUND");
+    }
+
+    [Fact]
+    public async Task AddGame_ShouldAddGame_WhenUserAndGameExist()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var authenticatedUser = userId;
+        var gameId = Guid.NewGuid();
+        var userRequest = new AddGameToUserRequest(userId, gameId);
+        var existingUser = new User("User1", "user1@example.com", "password", "user");
+        var existingGame = new Game("Game1", "Description", "PC", "Company", 59.99m);
+
+        _userRepositoryMock.Setup(repo => repo.GetUserById(userId)).ReturnsAsync(existingUser);
+        _gameRepositoryMock.Setup(repo => repo.GetGameById(gameId)).ReturnsAsync(existingGame);
+
+        // Act
+        var response = await _userService.AddGame(userRequest, authenticatedUser, "user");
+
+        // Assert
+        _userRepositoryMock.Verify(repo => repo.AddGame(userId, gameId), Times.Once);
+        Assert.NotNull(response);
+        Assert.True(response.IsSuccessful);
+    }
+
+    [Fact]
+    public async Task AddGame_ShouldReturnError_WhenUserTryToAddGameInAnotherUser()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var authenticatedUser = Guid.NewGuid();
+        var gameId = Guid.NewGuid();
+        var userRequest = new AddGameToUserRequest(userId, gameId);
+
+        // Act
+        var response = await _userService.AddGame(userRequest, authenticatedUser, "user");
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.False(response.IsSuccessful);
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        Assert.Contains(response.Errors!, e => e.Code == "USER_NOT_ALLWED_TO_ADD_GAME_IN_ANOTHER_USER");
+    }
+
+    [Fact]
+    public async Task AddGame_ShouldReturnError_WhenUserDoesNotExist()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var authenticatedUser = userId;
+        var gameId = Guid.NewGuid();
+        var userRequest = new AddGameToUserRequest(userId, gameId);
+
+        _userRepositoryMock.Setup(repo => repo.GetUserById(userId)).ReturnsAsync((User?)null);
+
+        // Act
+        var response = await _userService.AddGame(userRequest, authenticatedUser, "user");
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.False(response.IsSuccessful);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains(response.Errors!, e => e.Code == "USER_NOT_FOUND");
+    }
+
+    [Fact]
+    public async Task AddGame_ShouldReturnError_WhenGameDoesNotExist()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+        var authenticatedUser = userId;
+        var gameId = Guid.NewGuid();
+        var userRequest = new AddGameToUserRequest(userId, gameId);
+        var existingUser = new User("User1", "user1@example.com", "password", "user");
+
+        _userRepositoryMock.Setup(repo => repo.GetUserById(userId)).ReturnsAsync(existingUser);
+        _gameRepositoryMock.Setup(repo => repo.GetGameById(gameId)).ReturnsAsync((Game?)null);
+
+        // Act
+        var response = await _userService.AddGame(userRequest, authenticatedUser, "user");
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.False(response.IsSuccessful);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains(response.Errors!, e => e.Code == "GAME_NOT_FOUND");
     }
 }

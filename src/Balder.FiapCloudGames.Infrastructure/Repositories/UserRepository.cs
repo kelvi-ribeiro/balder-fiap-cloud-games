@@ -22,11 +22,21 @@ namespace Balder.FiapCloudGames.Infrastructure.Repositories
 
         public async Task<User?> GetUserById(Guid id)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+            return await _context
+                .Users
+                .Include(u => u.GameUsers)
+                .ThenInclude(gu => gu.Game)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
         public async Task<User?> GetUserByEmail(string email)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+            return await _context
+                .Users
+                .Include(u => u.GameUsers)
+                .ThenInclude(gu => gu.Game)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
         public async Task CreateUser(User user)
         {
@@ -47,6 +57,13 @@ namespace Balder.FiapCloudGames.Infrastructure.Repositories
                 throw new Exception("Usuário não encontrado!");
             }
             _context.Users.Remove(userToDelete);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddGame(Guid userId, Guid gameId)
+        {
+            var gameUser = new GameUser(gameId, userId);
+            _context.GameUsers.Add(gameUser);
             await _context.SaveChangesAsync();
         }
     }

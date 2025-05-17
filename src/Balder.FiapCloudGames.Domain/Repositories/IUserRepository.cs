@@ -10,5 +10,6 @@ namespace Balder.FiapCloudGames.Domain.Repositories
         Task CreateUser(User user);
         Task UpdateUser(User user);
         Task DeleteUser(Guid id);
+        Task AddGame(Guid userId, Guid gameId);
     }
 }

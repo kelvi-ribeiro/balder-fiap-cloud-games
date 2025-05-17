@@ -55,4 +55,23 @@ public class UserController(IUserService userService) : BaseController
     {
         return await this.MakeSafeCallAsync(() => userService.DeleteUser(id));
     }
+
+    [HttpPost("games")]
+    [SwaggerOperation(Summary = "Adicionar game", Description = "Endpoint para adicionar um game ao usuário")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [Authorize(Roles = "user,admin")]
+    public async Task<IActionResult> AddGame(AddGameToUserRequest request)
+    {
+        var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "user-id");
+
+        var authenticatedUserId = Guid.Parse(userIdClaim!.Value);
+
+        var roleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "role");
+        var role = roleClaim?.Value;
+
+        return await this.MakeSafeCallAsync(() => userService.AddGame(request, authenticatedUserId, role!));
+    }
 }

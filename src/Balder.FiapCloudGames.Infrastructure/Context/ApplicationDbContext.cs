@@ -9,6 +9,7 @@ public class ApplicationDbContext : DbContext
     #region Tabelas
     public DbSet<User> Users { get; set; }
     public DbSet<Game> Games { get; set; }
+    public DbSet<GameUser> GameUsers { get; set; }
     #endregion
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -25,6 +26,7 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new GameConfiguration());
+        modelBuilder.ApplyConfiguration(new GameUserConfiguration());
 
         modelBuilder.Entity<User>().HasData(
             new User("a64eaba9-8753-466a-9500-7ac3ada50342", "Admin", "admin@admin.com", "$2a$11$qMAkSQCPQ/AgL3JqFv/aI.TNxO2FRFs8rWjzx1c2Zm6PWwupVrHXi", "admin"), //Password - adminFG123!

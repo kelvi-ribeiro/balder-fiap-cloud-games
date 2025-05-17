@@ -10,4 +10,5 @@ public interface IUserService
     Task<GetAllUsersResponse> GetAllUsers();
     Task<BaseResponse> UpdateUser(UserRequest user, Guid id);
     Task<BaseResponse> DeleteUser(Guid id);
+    Task<BaseResponse> AddGame(AddGameToUserRequest userRequest, Guid authenticatedUserId, string role);
 }

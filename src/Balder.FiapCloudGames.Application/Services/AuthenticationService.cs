@@ -20,9 +20,9 @@ public class AuthenticationService(IUserRepository userRepository, IAuthenticati
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Role, user.Role)
+            new("user-id", user.Id.ToString()),
+            new("name", user.Name),
+            new("role", user.Role)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.Key));
