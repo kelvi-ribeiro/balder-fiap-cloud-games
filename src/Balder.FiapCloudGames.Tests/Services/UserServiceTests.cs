@@ -165,25 +165,6 @@ public class UserServiceTests
     }
 
     [Fact]
-    public async Task AddGame_ShouldReturnError_WhenUserTryToAddGameInAnotherUser()
-    {
-        // Arrange
-        var userId = Guid.NewGuid();
-        var authenticatedUser = Guid.NewGuid();
-        var gameId = Guid.NewGuid();
-        var userRequest = new AddGameToUserRequest(userId, gameId);
-
-        // Act
-        var response = await _userService.AddGame(userRequest, authenticatedUser, "user");
-
-        // Assert
-        Assert.NotNull(response);
-        Assert.False(response.IsSuccessful);
-        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
-        Assert.Contains(response.Errors!, e => e.Code == "USER_NOT_ALLWED_TO_ADD_GAME_IN_ANOTHER_USER");
-    }
-
-    [Fact]
     public async Task AddGame_ShouldReturnError_WhenUserDoesNotExist()
     {
         // Arrange

@@ -69,12 +69,6 @@ public class UserService(IUserRepository userRepository, IGameRepository gameRep
     public async Task<BaseResponse> AddGame(AddGameToUserRequest userRequest, Guid authenticatedUserId, string role)
     {
         var response = new BaseResponse();
-        if (role != "admin" && authenticatedUserId != userRequest.UserId)
-        {
-            response.AddError("USER_NOT_ALLWED_TO_ADD_GAME_IN_ANOTHER_USER", "You are not authorized to add a game to this user.");
-            response.StatusCode = HttpStatusCode.Forbidden;
-            return response;
-        }
         var user = await userRepository.GetUserById(userRequest.UserId);
         if (user == null)
         {
